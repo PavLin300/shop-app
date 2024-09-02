@@ -1,0 +1,32 @@
+.navigation {
+	text-align: center;
+	background: #aab396;
+	padding: 20px;
+}
+
+.navigation ul {
+	display: flex;
+	justify-content: space-around;
+}
+
+.navigation ul li {
+	list-style: none;
+	font-family: "Open Sans", sans-serif;
+	cursor: pointer;
+}
+
+.navigation ul li:hover a {
+	color: aliceblue;
+}
+
+.container {
+	max-width: 700px;
+	margin: auto;
+}
+
+.navigation a {
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
+	transition: 0.2s;
+}

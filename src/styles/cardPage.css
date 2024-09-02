@@ -1,0 +1,32 @@
+.cardPage {
+	display: flex;
+	gap: 100px;
+	color: aliceblue;
+	justify-content: center;
+	padding: 100px;
+}
+
+.cardPageText {
+	max-width: 700px;
+	line-height: 1.5;
+	font-family: "Open Sans", sans-serif;
+}
+
+.buyButton {
+	width: 140px;
+	height: 40px;
+	font-size: 20px;
+	cursor: pointer;
+	background: black;
+	border: 2px solid black;
+	color: aliceblue;
+	transition: 0.3s;
+	margin-top: 20px;
+	border-radius: 7px;
+}
+
+.buyButton:hover {
+	background: aliceblue;
+	color: black;
+	border: 2px solid black;
+}
