@@ -1,18 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useTransition } from "react";
 import getProducts from "./getProducts";
 import ProductList from "./ProductList";
 import ErrorComponent from "./ErrorComponent";
 import SortingComponent from "./SortingComponent";
+import SearchComponent from "./SearchComponent";
+import filterProducts from "./filterProducts";
+import { ThreeDots } from "react-loader-spinner";
 function Men() {
 	const [menClothes, setMenClothes] = useState();
 	const [error, setError] = useState();
 	const [sortingType, setSortingType] = useState();
+	const savedProducts = useRef();
+	const [inputValue, setInputValue] = useState("");
+	const [isPending, startTransition] = useTransition();
 	useEffect(() => {
 		getProducts("men's clothing")
 			.then((res) => {
 				if (!res.length) {
 					setError(true);
 				} else {
+					savedProducts.current = res;
 					setMenClothes(res);
 				}
 			})
@@ -32,20 +39,48 @@ function Men() {
 				<ErrorComponent />
 			) : (
 				<>
-					{menClothes && (
-						<SortingComponent
-							sortingType={sortingType}
-							onClick={() => {
-								if (sortingType) {
-									setSortingType(sortingType.split("").reverse().join(""));
-								} else {
-									setSortingType("az");
-								}
-							}}
-						/>
-					)}
+					<div
+						style={{
+							display: "flex",
+							gap: 30,
+							alignItems: "center",
+							justifyContent: "center",
+						}}
+					>
+						{menClothes && (
+							<SortingComponent
+								sortingType={sortingType}
+								onClick={() => {
+									if (sortingType) {
+										setSortingType(sortingType.split("").reverse().join(""));
+									} else {
+										setSortingType("az");
+									}
+								}}
+							/>
+						)}
+						{menClothes && (
+							<SearchComponent
+								value={inputValue}
+								onSearch={(event) => {
+									setInputValue(event.target.value);
+									startTransition(() => {
+										setMenClothes(
+											filterProducts(savedProducts.current, event.target.value)
+										);
+									});
+								}}
+							/>
+						)}
+					</div>
 
-					<ProductList products={menClothes} />
+					{isPending ? (
+						<div style={{ display: "flex", justifyContent: "center" }}>
+							<ThreeDots color='#aab396' />
+						</div>
+					) : (
+						<ProductList products={menClothes} />
+					)}
 				</>
 			)}
 		</>

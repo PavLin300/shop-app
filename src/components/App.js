@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import "../styles/general.css";
 import ProductList from "./ProductList";
 import Navigation from "./Navigation";
@@ -7,12 +7,15 @@ import { useLocation } from "react-router-dom";
 import ErrorComponent from "./ErrorComponent";
 import SortingComponent from "./SortingComponent";
 import SearchComponent from "./SearchComponent";
+import filterProducts from "./filterProducts";
+import { ThreeDots } from "react-loader-spinner";
 function App() {
 	const [products, setProducts] = useState();
 	const [error, setError] = useState();
 	const [sortingType, setSortingType] = useState();
-	const [searchItem, setSearchItem] = useState();
-	const [savedProducts, setSavedProducts] = useState();
+	const savedProducts = useRef();
+	const [inputValue, setInputValue] = useState("");
+	const [isPending, startTransition] = useTransition();
 	useEffect(() => {
 		async function getProducts() {
 			try {
@@ -20,7 +23,7 @@ function App() {
 				let result = await response.json();
 
 				setProducts(result);
-				setSavedProducts(result);
+				savedProducts.current = result;
 			} catch (error) {
 				setError(error);
 			}
@@ -36,23 +39,12 @@ function App() {
 		}
 	}, [sortingType, products]);
 
-	useEffect(() => {
-		if (!searchItem) {
-			//если пустая строка отображаем сохраненый список
-			setProducts(savedProducts);
-		} else {
-			setProducts(
-				savedProducts?.filter((product) => product.title.startsWith(searchItem))
-			);
-		}
-	}, [searchItem]);
-
 	let location = useLocation(); //получаем адрес
 
 	return (
 		<>
 			<Navigation />
-
+			{/* в зависимости от длины адреса отображаем внутренний компонент или дефолт список  */}
 			{error ? (
 				<ErrorComponent />
 			) : location.pathname.length > 1 ? (
@@ -62,7 +54,7 @@ function App() {
 					<div
 						style={{
 							display: "flex",
-							gap: 50,
+							gap: 30,
 							alignItems: "center",
 							justifyContent: "center",
 						}}
@@ -79,13 +71,30 @@ function App() {
 								}}
 							/>
 						)}
-						{products && <SearchComponent onSearch={setSearchItem} />}
+						{products && (
+							<SearchComponent
+								value={inputValue}
+								onSearch={(event) => {
+									setInputValue(event.target.value);
+									startTransition(() => {
+										setProducts(
+											filterProducts(savedProducts.current, event.target.value)
+										);
+									});
+								}}
+							/>
+						)}
 					</div>
 
-					<ProductList products={products} />
+					{isPending ? (
+						<div style={{ display: "flex", justifyContent: "center" }}>
+							<ThreeDots color='#aab396' />
+						</div>
+					) : (
+						<ProductList products={products} />
+					)}
 				</>
 			)}
-			{/* в зависимости от длины адреса отображаем внутренний компонент или дефолт список  */}
 		</>
 	);
 }
