@@ -27,13 +27,13 @@ function Electronics() {
 			.catch((err) => setError(err));
 	}, []);
 
-	useEffect(() => {
-		if (sortingType === "az") {
-			electronics?.sort((a, b) => b.price - a.price);
-		} else {
-			electronics?.sort((a, b) => a.price - b.price);
-		}
-	}, [sortingType, electronics]);
+	// useEffect(() => {
+	// 	if (sortingType === "az") {
+	// 		electronics?.sort((a, b) => b.price - a.price);
+	// 	} else {
+	// 		electronics?.sort((a, b) => a.price - b.price);
+	// 	}
+	// }, [sortingType, electronics]);
 
 	return (
 		<>
@@ -53,12 +53,23 @@ function Electronics() {
 							<SortingComponent
 								sortingType={sortingType}
 								onClick={() => {
-									if (sortingType) {
+									if (sortingType === "az") {
 										setSortingType(sortingType.split("").reverse().join(""));
+										electronics.sort((a, b) => b.price - a.price);
+									} else if (sortingType === "za") {
+										setSortingType("az");
+										electronics.sort((a, b) => a.price - b.price);
 									} else {
 										setSortingType("az");
 									}
 								}}
+								// onClick={() => {
+								// 	if (sortingType) {
+								// 		setSortingType(sortingType.split("").reverse().join(""));
+								// 	} else {
+								// 		setSortingType("az");
+								// 	}
+								// }}
 							/>
 						)}
 						{electronics && (

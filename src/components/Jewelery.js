@@ -26,13 +26,13 @@ function Jewelery() {
 			.catch((err) => setError(err));
 	}, []);
 
-	useEffect(() => {
-		if (sortingType === "az") {
-			jewelery?.sort((a, b) => b.price - a.price);
-		} else {
-			jewelery?.sort((a, b) => a.price - b.price);
-		}
-	}, [sortingType, jewelery]);
+	// useEffect(() => {
+	// 	if (sortingType === "az") {
+	// 		jewelery?.sort((a, b) => b.price - a.price);
+	// 	} else {
+	// 		jewelery?.sort((a, b) => a.price - b.price);
+	// 	}
+	// }, [sortingType, jewelery]);
 	return (
 		<>
 			{error ? (
@@ -51,12 +51,21 @@ function Jewelery() {
 							<SortingComponent
 								sortingType={sortingType}
 								onClick={() => {
-									if (sortingType) {
+									if (sortingType === "az") {
 										setSortingType(sortingType.split("").reverse().join(""));
+										jewelery.sort((a, b) => b.price - a.price);
 									} else {
 										setSortingType("az");
+										jewelery.sort((a, b) => a.price - b.price);
 									}
 								}}
+								// onClick={() => {
+								// 	if (sortingType) {
+								// 		setSortingType(sortingType.split("").reverse().join(""));
+								// 	} else {
+								// 		setSortingType("az");
+								// 	}
+								// }}
 							/>
 						)}
 						{jewelery && (

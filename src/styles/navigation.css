@@ -6,7 +6,7 @@
 
 .navigation ul {
 	display: flex;
-	justify-content: space-around;
+	gap: 40px;
 }
 
 .navigation ul li {
@@ -20,8 +20,10 @@
 }
 
 .container {
-	max-width: 700px;
+	max-width: 800px;
 	margin: auto;
+	display: flex;
+	justify-content: space-around;
 }
 
 .navigation a {

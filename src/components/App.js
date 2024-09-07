@@ -9,6 +9,8 @@ import SortingComponent from "./SortingComponent";
 import SearchComponent from "./SearchComponent";
 import filterProducts from "./filterProducts";
 import { ThreeDots } from "react-loader-spinner";
+import { CartContext } from "./CartContext";
+import CartPopOut from "./CartPopOut";
 function App() {
 	const [products, setProducts] = useState();
 	const [error, setError] = useState();
@@ -16,6 +18,8 @@ function App() {
 	const savedProducts = useRef();
 	const [inputValue, setInputValue] = useState("");
 	const [isPending, startTransition] = useTransition();
+	const [cart, setCart] = useState([]);
+	const [showCart, setShowCart] = useState(false);
 	useEffect(() => {
 		async function getProducts() {
 			try {
@@ -31,19 +35,35 @@ function App() {
 		getProducts();
 	}, []);
 
-	useEffect(() => {
-		if (sortingType === "az") {
-			products?.sort((a, b) => b.price - a.price);
-		} else {
-			products?.sort((a, b) => a.price - b.price);
-		}
-	}, [sortingType, products]);
+	// useEffect(() => {
+	// 	if (sortingType === "az") {
+	// 		products?.sort((a, b) => b.price - a.price);
+	// 	} else {
+	// 		products?.sort((a, b) => a.price - b.price);
+	// 	}
+	// }, [sortingType, products]);
 
 	let location = useLocation(); //получаем адрес
 
+	const addToCart = (newProduct) => {
+		if (cart.find((product) => product.id === newProduct.id)) return;
+		setCart([...cart, newProduct]);
+	};
 	return (
-		<>
-			<Navigation />
+		// создаем провайдер контекста и передаем корзину и ф-цию добавления
+		<CartContext.Provider value={{ cart, addToCart }}>
+			{showCart ? (
+				<CartPopOut
+					onClose={(event) => {
+						setShowCart(!showCart);
+					}}
+				/>
+			) : null}
+			<Navigation
+				onCart={(event) => {
+					setShowCart(!showCart);
+				}}
+			/>
 			{/* в зависимости от длины адреса отображаем внутренний компонент или дефолт список  */}
 			{error ? (
 				<ErrorComponent />
@@ -63,12 +83,22 @@ function App() {
 							<SortingComponent
 								sortingType={sortingType}
 								onClick={() => {
-									if (sortingType) {
+									if (sortingType === "az") {
 										setSortingType(sortingType.split("").reverse().join(""));
+										products.sort((a, b) => b.price - a.price);
 									} else {
 										setSortingType("az");
+										products.sort((a, b) => a.price - b.price);
 									}
 								}}
+
+								// onClick={() => {
+								// 	if (sortingType) {
+								// 		setSortingType(sortingType.split("").reverse().join(""));
+								// 	} else {
+								// 		setSortingType("az");
+								// 	}
+								// }}
 							/>
 						)}
 						{products && (
@@ -95,7 +125,7 @@ function App() {
 					)}
 				</>
 			)}
-		</>
+		</CartContext.Provider>
 	);
 }
 

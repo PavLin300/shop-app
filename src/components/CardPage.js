@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CiStar } from "react-icons/ci";
 import "../styles/cardPage.css";
+import { CartContext } from "./CartContext";
 function CardPage() {
 	const { id } = useParams();
 	const [foundProduct, setFoundProduct] = useState();
+	const { addToCart } = useContext(CartContext); // получаем корзину и ф-цию добавления из контекста
 	useEffect(() => {
 		async function getProducts() {
 			let response = await fetch("https://fakestoreapi.com/products");
@@ -52,7 +54,14 @@ function CardPage() {
 								<span style={{ fontWeight: "bold" }}>Price: </span>
 								{item.price} $
 							</p>
-							<button className='buyButton'>Buy</button>
+							<button
+								className='buyButton'
+								onClick={() => {
+									addToCart(foundProduct[0]);
+								}}
+							>
+								Buy
+							</button>
 						</div>
 					</div>
 				))}

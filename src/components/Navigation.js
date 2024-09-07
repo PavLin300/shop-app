@@ -1,6 +1,7 @@
 import "../styles/navigation.css";
 import { Link } from "react-router-dom";
-function Navigation() {
+import { IoCartOutline } from "react-icons/io5";
+function Navigation({ onCart = (f) => f }) {
 	return (
 		<div className='navigation'>
 			<div className='container'>
@@ -26,6 +27,10 @@ function Navigation() {
 						</li>
 					</ul>
 				</nav>
+
+				<div style={{ cursor: "pointer" }} onClick={onCart}>
+					<IoCartOutline size={25} />
+				</div>
 			</div>
 		</div>
 	);

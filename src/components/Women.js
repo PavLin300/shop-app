@@ -26,13 +26,13 @@ function Women() {
 			.catch((err) => setError(err));
 	}, []);
 
-	useEffect(() => {
-		if (sortingType === "az") {
-			womenClothes?.sort((a, b) => b.price - a.price);
-		} else {
-			womenClothes?.sort((a, b) => a.price - b.price);
-		}
-	}, [sortingType, womenClothes]);
+	// useEffect(() => {
+	// 	if (sortingType === "az") {
+	// 		womenClothes?.sort((a, b) => b.price - a.price);
+	// 	} else {
+	// 		womenClothes?.sort((a, b) => a.price - b.price);
+	// 	}
+	// }, [sortingType, womenClothes]);
 	return (
 		<>
 			{error ? (
@@ -51,12 +51,21 @@ function Women() {
 							<SortingComponent
 								sortingType={sortingType}
 								onClick={() => {
-									if (sortingType) {
+									if (sortingType === "az") {
 										setSortingType(sortingType.split("").reverse().join(""));
+										womenClothes.sort((a, b) => b.price - a.price);
 									} else {
 										setSortingType("az");
+										womenClothes.sort((a, b) => a.price - b.price);
 									}
 								}}
+								// onClick={() => {
+								// 	if (sortingType) {
+								// 		setSortingType(sortingType.split("").reverse().join(""));
+								// 	} else {
+								// 		setSortingType("az");
+								// 	}
+								// }}
 							/>
 						)}
 						{womenClothes && (
