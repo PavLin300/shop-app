@@ -1,7 +1,7 @@
 function ErrorPage() {
 	return (
-		<div>
-			<p>Error Page</p>
+		<div style={{ color: "white", textAlign: "center", padding: 50 }}>
+			<h1>Error Page</h1>
 		</div>
 	);
 }

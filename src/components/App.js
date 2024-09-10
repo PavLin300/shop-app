@@ -11,6 +11,7 @@ import filterProducts from "./filterProducts";
 import { ThreeDots } from "react-loader-spinner";
 import { CartContext } from "./CartContext";
 import CartPopOut from "./CartPopOut";
+
 function App() {
 	const [products, setProducts] = useState();
 	const [error, setError] = useState();
@@ -35,30 +36,26 @@ function App() {
 		getProducts();
 	}, []);
 
-	// useEffect(() => {
-	// 	if (sortingType === "az") {
-	// 		products?.sort((a, b) => b.price - a.price);
-	// 	} else {
-	// 		products?.sort((a, b) => a.price - b.price);
-	// 	}
-	// }, [sortingType, products]);
-
 	let location = useLocation(); //получаем адрес
 
 	const addToCart = (newProduct) => {
 		if (cart.find((product) => product.id === newProduct.id)) return;
 		setCart([...cart, newProduct]);
 	};
+
+	const deleteFromCart = (id) => {
+		setCart(cart.filter((product) => product.id !== id));
+	};
 	return (
 		// создаем провайдер контекста и передаем корзину и ф-цию добавления
-		<CartContext.Provider value={{ cart, addToCart }}>
-			{showCart ? (
-				<CartPopOut
-					onClose={(event) => {
-						setShowCart(!showCart);
-					}}
-				/>
-			) : null}
+		<CartContext.Provider value={{ cart, addToCart, deleteFromCart }}>
+			<CartPopOut
+				isVisible={showCart}
+				onClose={(event) => {
+					setShowCart(!showCart);
+				}}
+			/>
+
 			<Navigation
 				onCart={(event) => {
 					setShowCart(!showCart);
@@ -91,14 +88,6 @@ function App() {
 										products.sort((a, b) => a.price - b.price);
 									}
 								}}
-
-								// onClick={() => {
-								// 	if (sortingType) {
-								// 		setSortingType(sortingType.split("").reverse().join(""));
-								// 	} else {
-								// 		setSortingType("az");
-								// 	}
-								// }}
 							/>
 						)}
 						{products && (

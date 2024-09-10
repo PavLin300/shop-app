@@ -3,10 +3,11 @@ import { useParams } from "react-router-dom";
 import { CiStar } from "react-icons/ci";
 import "../styles/cardPage.css";
 import { CartContext } from "./CartContext";
+
 function CardPage() {
 	const { id } = useParams();
 	const [foundProduct, setFoundProduct] = useState();
-	const { addToCart } = useContext(CartContext); // получаем корзину и ф-цию добавления из контекста
+	const { cart, addToCart } = useContext(CartContext); // получаем корзину и ф-цию добавления из контекста
 	useEffect(() => {
 		async function getProducts() {
 			let response = await fetch("https://fakestoreapi.com/products");
@@ -56,11 +57,13 @@ function CardPage() {
 							</p>
 							<button
 								className='buyButton'
-								onClick={() => {
+								onClick={(event) => {
 									addToCart(foundProduct[0]);
 								}}
 							>
-								Buy
+								{cart.find((product) => product.id === foundProduct[0].id)
+									? "Added to Cart"
+									: "Buy"}
 							</button>
 						</div>
 					</div>

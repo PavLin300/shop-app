@@ -26,13 +26,6 @@ function Women() {
 			.catch((err) => setError(err));
 	}, []);
 
-	// useEffect(() => {
-	// 	if (sortingType === "az") {
-	// 		womenClothes?.sort((a, b) => b.price - a.price);
-	// 	} else {
-	// 		womenClothes?.sort((a, b) => a.price - b.price);
-	// 	}
-	// }, [sortingType, womenClothes]);
 	return (
 		<>
 			{error ? (
@@ -59,13 +52,6 @@ function Women() {
 										womenClothes.sort((a, b) => a.price - b.price);
 									}
 								}}
-								// onClick={() => {
-								// 	if (sortingType) {
-								// 		setSortingType(sortingType.split("").reverse().join(""));
-								// 	} else {
-								// 		setSortingType("az");
-								// 	}
-								// }}
 							/>
 						)}
 						{womenClothes && (

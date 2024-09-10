@@ -27,14 +27,6 @@ function Electronics() {
 			.catch((err) => setError(err));
 	}, []);
 
-	// useEffect(() => {
-	// 	if (sortingType === "az") {
-	// 		electronics?.sort((a, b) => b.price - a.price);
-	// 	} else {
-	// 		electronics?.sort((a, b) => a.price - b.price);
-	// 	}
-	// }, [sortingType, electronics]);
-
 	return (
 		<>
 			{error ? (
@@ -63,13 +55,6 @@ function Electronics() {
 										setSortingType("az");
 									}
 								}}
-								// onClick={() => {
-								// 	if (sortingType) {
-								// 		setSortingType(sortingType.split("").reverse().join(""));
-								// 	} else {
-								// 		setSortingType("az");
-								// 	}
-								// }}
 							/>
 						)}
 						{electronics && (

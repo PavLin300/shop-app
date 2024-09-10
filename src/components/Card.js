@@ -1,10 +1,32 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/card.css";
 import { CiStar } from "react-icons/ci";
-function Card({ id, title, price, image, rating }) {
+import { motion } from "framer-motion";
+
+const variantsCard = {
+	visible: (i) => ({
+		// получаем индекс из параметра custom и делаем задержку
+		opacity: 1,
+
+		transition: { delay: i * 0.05 },
+	}),
+
+	hidden: {
+		opacity: 0,
+	},
+};
+
+function Card({ id, title, price, image, rating, index }) {
 	let navigate = useNavigate();
 	return (
-		<div className='productCard' onClick={() => navigate(`/${id}`)}>
+		<motion.div
+			variants={variantsCard}
+			initial='hidden'
+			animate='visible'
+			custom={index}
+			className='productCard'
+			onClick={() => navigate(`/${id}`)}
+		>
 			<img src={image} alt='' />
 			{/*product info*/}
 			<div
@@ -33,7 +55,7 @@ function Card({ id, title, price, image, rating }) {
 					</div>
 				</div>
 			</div>
-		</div>
+		</motion.div>
 	);
 }
 

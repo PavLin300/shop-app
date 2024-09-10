@@ -1,14 +1,13 @@
 .cartPopOut {
 	position: absolute;
-	top: 50%;
-	left: 50%;
 	width: 800px;
 	height: 400px;
-	background: #aab396;
-	transform: translate(-50%, -50%);
+	background: #674636;
 	border-radius: 20px;
-	padding: 30px;
+	padding: 15px;
 	overflow-y: scroll;
+	font-family: "Open Sans", sans-serif;
+	color: aliceblue;
 }
 
 .bgPopOut {
@@ -25,4 +24,33 @@ div::-webkit-scrollbar {
 div::-webkit-scrollbar-thumb {
 	background-color: black;
 	border-radius: 9em;
+}
+
+.cartListElem {
+	display: flex;
+	margin-bottom: 10px;
+	gap: 20px;
+	border: 2px solid black;
+	border-radius: 20px;
+	width: 100%;
+	padding: 5px;
+}
+
+.cartListElem img {
+	border-radius: 20px;
+}
+
+.cartListElemText {
+	flex-basis: 80%;
+	align-self: center;
+	display: flex;
+	justify-content: space-between;
+}
+
+.closeSvg {
+	transition: 0.2s;
+}
+
+.closeSvg:hover {
+	transform: rotate(90deg);
 }
